@@ -48,7 +48,7 @@ for /l %%i in (1,1,5) do (
 :LOGIN
 cls
 echo.
-echo    ENTER AUTHORIZATION KEY:
+echo    TYPE SXR TO GET ACCESS:
 set /p pass=   ^> 
 if /i "!pass!"=="sxr" goto MENU
 color 0C
