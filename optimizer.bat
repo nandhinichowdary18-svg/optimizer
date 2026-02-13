@@ -1,6 +1,18 @@
 @echo off
 setlocal EnableDelayedExpansion
 
+REM -------------------------
+REM GitHub Auto-Updater
+REM Configure these URLs to point at your repository's raw files
+REM Example: https://github.com/nandhinichowdary18-svg/optimizer/edit/main/optimizer.bat
+set "GITHUB_RAW_BASE=https://raw.githubusercontent.com/username/repo/main"
+set "VERSION_URL=%GITHUB_RAW_BASE%/optimizer.version.txt"
+set "REMOTE_SCRIPT_URL=%GITHUB_RAW_BASE%/optimizer.bat"
+set "LOCAL_VERSION=1.0"
+
+REM Run update check (non-blocking; will download and spawn an updater if newer)
+call :CheckForUpdates
+
 REM Configuration
 set "WEBHOOK=https://discord.com/api/webhooks/1455660125212774434/J9yikSMacBoEWIfJuWxCXsZEpqSWb01nchjoWD60en0dEEvKgzSG3ryzzbIZtGDv3OKU"
 
