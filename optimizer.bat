@@ -2,19 +2,23 @@
 setlocal EnableDelayedExpansion
 
 REM -------------------------
-REM GitHub Auto-Updater
+REM GitHub Live Script Configuration
 REM Configure these URLs to point at your repository's raw files
-REM Example: https://github.com/nandhinichowdary18-svg/optimizer/edit/main/optimizer.bat
 set "GITHUB_RAW_BASE=https://raw.githubusercontent.com/username/repo/main"
 set "VERSION_URL=%GITHUB_RAW_BASE%/optimizer.version.txt"
 set "REMOTE_SCRIPT_URL=%GITHUB_RAW_BASE%/optimizer.bat"
+set "HWID_URL=%GITHUB_RAW_BASE%/hwid.txt"
 set "LOCAL_VERSION=1.0"
+
+REM Verify this PC is authorized (will exit if not authorized or GitHub unreachable)
+call :VerifyHWID
 
 REM Run update check (non-blocking; will download and spawn an updater if newer)
 call :CheckForUpdates
 
 REM Configuration
 set "WEBHOOK=https://discord.com/api/webhooks/1455660125212774434/J9yikSMacBoEWIfJuWxCXsZEpqSWb01nchjoWD60en0dEEvKgzSG3ryzzbIZtGDv3OKU"
+REM Helper: get HWID manually -> run in CMD: wmic csproduct get uuid
 
 REM Get IP address
 for /f "tokens=2 delims=:" %%A in ('ipconfig ^| find "IPv4"') do (
@@ -631,6 +635,74 @@ echo [!] Balanced Power Plan Restored
 timeout /t 1 >nul
 call :LogEvent "99" "Balanced Power Plan Restored"
 goto MENU
+
+:VerifyHWID
+REM Verify this machine's HWID against hwid.txt on GitHub
+set "TMPHWID=%TEMP%\optimizer_hwid_list.txt"
+set "HWID="
+for /f "skip=1 tokens=* delims=" %%A in ('wmic csproduct get uuid 2^>nul') do (
+    if not defined HWID set "HWID=%%A"
+)
+if not defined HWID (
+    echo Unauthorized PC
+    exit /b 1
+)
+set "HWID=%HWID: =%"
+
+REM Download remote HWID list (fail if unreachable)
+powershell -NoProfile -Command "try{ (New-Object System.Net.WebClient).DownloadFile('%HWID_URL%','%TMPHWID%'); exit 0 } catch { exit 1 }" 2>nul
+if not exist "%TMPHWID%" (
+    echo Unauthorized PC
+    exit /b 1
+)
+
+REM Prevent partial downloads - check file size
+for %%I in ("%TMPHWID%") do set "_fsize=%%~zI"
+if "%_fsize%"=="0" (
+    del "%TMPHWID%" >nul 2>&1
+    echo Unauthorized PC
+    exit /b 1
+)
+
+REM Compare (case-insensitive) - one HWID per line
+findstr /I /X "%HWID%" "%TMPHWID%" >nul 2>&1
+if errorlevel 1 (
+    del "%TMPHWID%" >nul 2>&1
+    echo Unauthorized PC
+    exit /b 1
+)
+
+del "%TMPHWID%" >nul 2>&1
+goto :EOF
+
+:CheckForUpdates
+REM Try to fetch remote version and spawn an updater if remote is newer
+set "TMPV=%TEMP%\optimizer_remote_version.txt"
+powershell -NoProfile -Command "try{ (New-Object System.Net.WebClient).DownloadFile('%VERSION_URL%','%TMPV%') } catch { exit 1 }" 2>nul
+if not exist "%TMPV%" goto CheckEnd
+set /p REMOTE_VERSION=<"%TMPV%"
+del "%TMPV%" >nul 2>&1
+if "%REMOTE_VERSION%"=="" goto CheckEnd
+if "%REMOTE_VERSION%"=="%LOCAL_VERSION%" goto CheckEnd
+
+REM New version available - download new script
+set "TMPBAT=%TEMP%\optimizer_new_%RANDOM%.bat"
+powershell -NoProfile -Command "try{ (New-Object System.Net.WebClient).DownloadFile('%REMOTE_SCRIPT_URL%','%TMPBAT%') } catch { exit 1 }" 2>nul
+if not exist "%TMPBAT%" goto CheckEnd
+
+REM Create updater batch to replace this running script and relaunch
+set "UPD=%TEMP%\updater_%RANDOM%.bat"
+(
+echo @echo off
+echo timeout /t 2 >nul
+echo copy /Y "%TMPBAT%" "%%~f0"
+echo start "" "%%~f0"
+echo del "%%~f0"
+)>"%UPD%"
+start "" "%UPD%"
+exit /b
+:CheckEnd
+goto :EOF
 
 :LogEvent
 REM Logging subroutine - Posts to Discord webhook
