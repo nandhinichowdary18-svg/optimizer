@@ -28,14 +28,14 @@ for /f "tokens=2 delims=:" %%A in ('ipconfig ^| find "IPv4"') do (
 :got_ip
 set "IP=!IP: =!"
 
-title ULTIMATE PC OPTIMIZER v2.1 - Invi X Live
+title ULTIMATE PC OPTIMIZER v1.1 - SHIVAXROY
 color 0A
 
 :STARTUP
 cls
 echo.
 echo    =======================================================================================================
-echo                                    SHIVAXROY - ROOTKIT INTERFACE v2.1                                                             
+echo                                    SHIVAXROY - ROOTKIT INTERFACE v1.1                                                             
 echo    =======================================================================================================
 echo.
 echo    [SYSTEM KERNEL INITIALIZING...]
@@ -62,7 +62,7 @@ goto LOGIN
 cls
 echo.
 echo    =========================================================================================================
-echo                                   ULTIMATE PC OPTIMIZER v2.1  -  SHIVAXROY                                        
+echo                                   ULTIMATE PC OPTIMIZER v1.1  -  SHIVAXROY                                        
 echo    =========================================================================================================
 echo.
 echo    User: %USERNAME%                     PC: %COMPUTERNAME%                      %TIME%
