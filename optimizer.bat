@@ -45,19 +45,6 @@ for /l %%i in (1,1,5) do (
     timeout /t 0 >nul
 )
 
-:LOGIN
-cls
-echo.
-echo    TYPE SXR TO GET ACCESS:
-set /p pass=   ^> 
-if /i "!pass!"=="sxr" goto MENU
-color 0C
-echo.
-echo    [!] INVALID KEY
-timeout /t 2 >nul
-color 0A
-goto LOGIN
-
 :MENU
 cls
 echo.
