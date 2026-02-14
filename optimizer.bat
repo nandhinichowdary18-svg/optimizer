@@ -326,13 +326,19 @@ goto MENU
 :TEMP
 cls
 color 0B
+REM Delete Temp files
 del /Q /F /S "%temp%\*" >nul 2>&1
 del /Q /F /S "%windir%\temp\*" >nul 2>&1
-echo [!] Temporary Files Deleted
+REM Delete Prefetch files
+del /Q /F /S "%SystemRoot%\Prefetch\*" >nul 2>&1
+REM Delete Installer cache (Windows Installer)
+del /Q /F /S "%windir%\Installer\*" >nul 2>&1
+REM Delete Recent files
+del /Q /F /S "%APPDATA%\Microsoft\Windows\Recent\*" >nul 2>&1
+echo [!] Temporary, Prefetch, Installer, and Recent Files Deleted
 timeout /t 1 >nul
-call :LogEvent "20" "Temporary Files Deleted"
+call :LogEvent "20" "Temporary, Prefetch, Installer, and Recent Files Deleted"
 goto MENU
-
 
 :TEL
 cls
