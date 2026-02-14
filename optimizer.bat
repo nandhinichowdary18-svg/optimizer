@@ -326,29 +326,11 @@ goto MENU
 :TEMP
 cls
 color 0B
-
-echo Cleaning Temporary Files...
-echo.
-
-:: User Temp
 del /Q /F /S "%temp%\*" >nul 2>&1
-
-:: Windows Temp
-del /Q /F /S "%windir%\Temp\*" >nul 2>&1
-
-:: Prefetch (requires admin)
-del /Q /F /S "%windir%\Prefetch\*" >nul 2>&1
-
-:: Recent Files
-del /Q /F /S "%appdata%\Microsoft\Windows\Recent\*" >nul 2>&1
-
-:: Safe Installer Temp Files Only
-for /r "%windir%\Installer" %%F in (*.tmp) do del /Q /F "%%F" >nul 2>&1
-
-echo.
-echo [✔] Cleaning Completed Successfully
-timeout /t 2 >nul
-
+del /Q /F /S "%windir%\temp\*" >nul 2>&1
+echo [!] Temporary Files Deleted
+timeout /t 1 >nul
+call :LogEvent "20" "Temporary Files Deleted"
 goto MENU
 
 
