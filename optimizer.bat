@@ -326,6 +326,7 @@ goto MENU
 :TEMP
 cls
 color 0B
+
 echo Cleaning Temporary Files...
 echo.
 
@@ -348,9 +349,8 @@ echo.
 echo [✔] Cleaning Completed Successfully
 timeout /t 2 >nul
 
-call :LogEvent "20" "Temporary Files Cleaned"
-
 goto MENU
+
 
 :TEL
 cls
