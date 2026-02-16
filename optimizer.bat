@@ -76,6 +76,7 @@ echo.
 echo      R. Restart Computer Now              X. Exit Program                          99. Reset to Balanced power plan
 echo.
 echo    -----------------------------------------------------------------------------------------------------------
+echo Option 20 is not working 
 set /p choice=   Enter selection: 
 
 if /i "!choice!"=="X" exit
