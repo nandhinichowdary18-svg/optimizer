@@ -324,26 +324,26 @@ call :LogEvent "19" "Window Animations Disabled"
 goto MENU
 
 :TEMP
-cls
-color 0B
+cls & color 0B
+echo Cleaning temporary files...
 
-REM Force working directory
-cd /d "%~dp0"
-
-REM Delete Temp files
-del /Q /F /S "%temp%\*" >nul 2>&1
-del /Q /F /S "%windir%\temp\*" >nul 2>&1
-
-REM Delete Prefetch files
-del /Q /F /S "%SystemRoot%\Prefetch\*" >nul 2>&1
-
-REM Delete Recent files
-del /Q /F /S "%APPDATA%\Microsoft\Windows\Recent\*" >nul 2>&1
-
-echo [!] Temporary, Prefetch, and Recent Files Deleted
-timeout /t 1 >nul
-
-call :LogEvent 20 "Temporary, Prefetch, and Recent Files Deleted"
+:: User Temp
+echo Deleting files in %TEMP%...
+del /q /f /s "%TEMP%\*.*" >nul 2>&1
+:: Windows Temp
+echo Deleting files in C:\Windows\Temp...
+del /q /f /s "C:\Windows\Temp\*.*" >nul 2>&1
+:: Prefetch (safe to clear .pf files only)
+echo Deleting Prefetch files...
+del /q /f /s "C:\Windows\Prefetch\*.pf" >nul 2>&1
+:: Recent files 
+echo Deleting Recent files...
+del /q /f /s "%APPDATA%\Microsoft\Windows\Recent\*.*" >nul 2>&1
+:: Optional: Recycle Bin (uncomment if needed)
+:: rd /s /q C:\$Recycle.Bin >nul 2>&1
+echo.
+echo [!] Temp, Prefetch and Recent Files Deleted
+timeout /t 2 >nul
 goto MENU
 
 
