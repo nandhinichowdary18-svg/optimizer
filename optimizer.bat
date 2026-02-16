@@ -326,51 +326,14 @@ goto MENU
 :TEMP
 cls
 color 0B
-echo ================================
-echo        CLEANING SYSTEM
-echo ================================
-echo.
-timeout /t 1 >nul
-echo [1/4] Cleaning User Temp...
-if exist "%TEMP%" (
-    del /q /f /s "%TEMP%\*" >nul 2>&1
-    echo     ✓ User Temp Cleaned
-) else (
-    echo     ! Temp folder not found
-)
-echo.
-timeout /t 1 >nul
-echo [2/4] Cleaning Windows Temp...
-if exist "C:\Windows\Temp" (
-    del /q /f /s "C:\Windows\Temp\*" >nul 2>&1
-    echo     ✓ Windows Temp Cleaned
-) else (
-    echo     ! Windows Temp not found
-)
-echo.
-timeout /t 1 >nul
-echo [3/4] Cleaning Prefetch...
-if exist "C:\Windows\Prefetch" (
-    del /q /f /s "C:\Windows\Prefetch\*.pf" >nul 2>&1
-    echo     ✓ Prefetch Cleaned
-) else (
-    echo     ! Prefetch folder not found
-)
-echo.
-timeout /t 1 >nul
-echo [4/4] Cleaning Recent Files...
-if exist "%APPDATA%\Microsoft\Windows\Recent" (
-    del /q /f /s "%APPDATA%\Microsoft\Windows\Recent\*" >nul 2>&1
-    echo     ✓ Recent Files Cleaned
-) else (
-    echo     ! Recent folder not found
-)
-echo.
-timeout /t 1 >nul
-echo        CLEANING COMPLETED
+
+if exist "%TEMP%" del /q /f /s "%TEMP%\*" >nul 2>&1
+if exist "C:\Windows\Temp" del /q /f /s "C:\Windows\Temp\*" >nul 2>&1
+if exist "C:\Windows\Prefetch" del /q /f /s "C:\Windows\Prefetch\*.pf" >nul 2>&1
+if exist "%APPDATA%\Microsoft\Windows\Recent" del /q /f /s "%APPDATA%\Microsoft\Windows\Recent\*" >nul 2>&1
+
 timeout /t 2 >nul
 goto MENU
-
 
 :TEL
 cls
