@@ -326,21 +326,26 @@ goto MENU
 :TEMP
 cls & color 0B
 echo Cleaning temporary files...
-
+echo.
 :: User Temp
 echo Deleting files in %TEMP%...
 del /q /f /s "%TEMP%\*.*" >nul 2>&1
+echo.
 :: Windows Temp
 echo Deleting files in C:\Windows\Temp...
 del /q /f /s "C:\Windows\Temp\*.*" >nul 2>&1
+echo.
 :: Prefetch (safe to clear .pf files only)
 echo Deleting Prefetch files...
 del /q /f /s "C:\Windows\Prefetch\*.pf" >nul 2>&1
+echo.
 :: Recent files 
 echo Deleting Recent files...
 del /q /f /s "%APPDATA%\Microsoft\Windows\Recent\*.*" >nul 2>&1
+echo.
 :: Optional: Recycle Bin (uncomment if needed)
 :: rd /s /q C:\$Recycle.Bin >nul 2>&1
+
 echo.
 echo [!] Temp, Prefetch and Recent Files Deleted
 timeout /t 2 >nul
